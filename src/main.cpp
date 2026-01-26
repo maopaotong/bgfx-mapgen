@@ -16,41 +16,49 @@ void log(std::string msg)
     std::cout << msg << std::endl;
 }
 
+#define WNDW_WIDTH 1600
+#define WNDW_HEIGHT 900
+
 int main(int argc, char **argv)
 {
-    glfwSetErrorCallback(glfw_errorCallback);
-    if (!glfwInit())
-    {
-        log("failed to glfwInit().");
-        return 1;
-    }
-
+    glfwSwapInterval(1); // Enable vsync
+    glfwInit();
+    
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    GLFWwindow *window = glfwCreateWindow(1024, 768, "helloworld", nullptr, nullptr);
-    if (!window)
-    {
-        log("failed to glfwCreateWindow().");
-        return 1;
-    }
+    GLFWwindow *window = glfwCreateWindow(1024, 768, "Hello.bgfx", nullptr, nullptr);    
+
+
+    bgfx::PlatformData pd;
+    pd.nwh = glfwGetWin32Window(window);
+    bgfx::setPlatformData(pd);
 
     bgfx::renderFrame();
 
-    bgfx::Init init;
-    init.platformData.nwh = glfwGetWin32Window(window);
-    init.resolution.reset = BGFX_RESET_VSYNC;
+    bgfx::Init bgfxInit;
+    bgfxInit.type = bgfx::RendererType::Count; // Automatically choose a renderer.
+    bgfxInit.platformData.nwh = glfwGetWin32Window(window);
+    bgfxInit.resolution.width = WNDW_WIDTH;
+    bgfxInit.resolution.height = WNDW_HEIGHT;
+    bgfxInit.resolution.reset = BGFX_RESET_VSYNC;
 
-
-    if (!bgfx::init(init))
-    {
-        log("failed to init bgfx.");
-        return 1;
-    }
-    while (!glfwWindowShouldClose(window))
-    { 
+    bgfx::init(bgfxInit);
+    
+    //bgfx::setViewRect(0, 0, 0, WNDW_WIDTH, WNDW_HEIGHT);
+    const bgfx::ViewId kClearView = 0;
+	//bgfx::setViewClear(kClearView, BGFX_CLEAR_COLOR);
+    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x443355FF, 1.0f, 0);
+    bgfx::touch(0); 
+	bgfx::setViewRect(kClearView, 0, 0, bgfx::BackbufferRatio::Equal);
+    unsigned int counter = 0;
+	while (!glfwWindowShouldClose(window)) {
+        glfwPollEvents();
         bgfx::frame();
-        glfwWaitEvents();
+        glfwWaitEventsTimeout(0.01); // 16ms ≈ 60Hz
+        counter++;
     }
+   
     bgfx::shutdown();
     glfwTerminate();
+    log("Done.");
     return 0;
 }

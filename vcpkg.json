@@ -9,6 +9,10 @@
     {
       "name": "glfw3",
       "platform": "windows"
+    },
+    {
+      "name": "imgui",
+      "platform": "windows"
     }
   ]
 }

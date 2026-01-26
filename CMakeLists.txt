@@ -13,6 +13,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 #  find_package
 find_package(bgfx CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
+find_package(imgui CONFIG REQUIRED)
 
 # source files
 file(GLOB_RECURSE SOURCES "src/*.cpp")
@@ -28,7 +29,7 @@ get_target_property(COMPILE_FLAGS ${PROJECT_NAME} COMPILE_OPTIONS)
 
 message(STATUS "C++ Compile Flags: ${COMPILE_FLAGS}")
 
-target_link_libraries(game PRIVATE bgfx::bgfx glfw)        
+target_link_libraries(game PRIVATE bgfx::bgfx bgfx::bx bgfx::bimg bgfx::bimg_decode glfw imgui::imgui)        
 #
 target_compile_options(game PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:/utf-8>
