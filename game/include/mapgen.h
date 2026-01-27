@@ -4,3 +4,8 @@
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
 #include <GLFW/glfw3.h>
+
+namespace mg
+{
+    
+};

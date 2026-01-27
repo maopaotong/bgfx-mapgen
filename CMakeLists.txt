@@ -1,41 +1,23 @@
-#
+# game-01/CMakeLists.txt
 cmake_minimum_required(VERSION 3.16)
-option(BUILD_GAME "Build game" ON)
 
-set(PROJECT_NAME, "game")
-project(game LANGUAGES CXX)
+set(PROJECT_NAME, "bgfx-mapgen")
+project(Game01 LANGUAGES CXX)
 
 # 设置全局标准（可选）
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-#  find_package
-find_package(bgfx CONFIG REQUIRED)
-find_package(glfw3 CONFIG REQUIRED)
-find_package(imgui CONFIG REQUIRED)
-
-# source files
-file(GLOB_RECURSE SOURCES "src/*.cpp")
+#set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 if(MSVC)
-    add_compile_options(/Zc:__cplusplus)
-    add_compile_options(/Zc:preprocessor)
     add_compile_options(/utf-8)
 endif()
 
-add_executable(game ${SOURCES})
-
-get_target_property(COMPILE_FLAGS ${PROJECT_NAME} COMPILE_OPTIONS)
+add_subdirectory(fog-util)
+add_subdirectory(game)
+    
 
 message(STATUS "C++ Compile Flags: ${COMPILE_FLAGS}")
 
-target_link_libraries(game PRIVATE bgfx::bgfx bgfx::bx bgfx::bimg bgfx::bimg_decode glfw imgui::imgui)        
-#
-target_compile_options(game PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:/utf-8>
-    $<$<CXX_COMPILER_ID:MSVC>:/bigobj>
-    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-finput-charset=UTF-8 -fexec-charset=UTF-8>
-)
-
-target_include_directories(game PRIVATE include)
 

@@ -13,6 +13,12 @@
     {
       "name": "imgui",
       "platform": "windows"
+    },
+    {
+      "name":"fmt",
+      "platform": "windows"
+
     }
+
   ]
 }
