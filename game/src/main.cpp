@@ -63,16 +63,16 @@ namespace mg
         bgfx::ProgramHandle m_program = loadProgram("game/material/showTex_vertex.glsl", "game/material/showTex_fragment.glsl");
 
         // bgfx::setViewRect(0, 0, 0, WNDW_WIDTH, WNDW_HEIGHT);
-        const bgfx::ViewId kClearView = 0;
+        const bgfx::ViewId v0 = 0;
         // bgfx::setViewClear(kClearView, BGFX_CLEAR_COLOR);
-        bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x443355FF, 1.0f, 0);
-        bgfx::touch(0);
-        bgfx::setViewRect(kClearView, 0, 0, bgfx::BackbufferRatio::Equal);
+        bgfx::setViewClear(v0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x443355FF, 1.0f, 0);
+        bgfx::touch(v0);
+        bgfx::setViewRect(v0, 0, 0, bgfx::BackbufferRatio::Equal);
         unsigned int counter = 0;
         while (!glfwWindowShouldClose(window))
         {
             glfwPollEvents();
-            bgfx::submit(0, m_program);
+            bgfx::submit(v0, m_program);
             bgfx::frame();
             glfwWaitEventsTimeout(0.01); // 16ms ≈ 60Hz
             counter++;
