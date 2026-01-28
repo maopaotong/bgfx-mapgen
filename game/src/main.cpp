@@ -1,4 +1,7 @@
+
+#define BGFX_CONFIG_DEBUG 1
 #include "mapgen.h"
+#include <bimg/bimg.h>
 #include <string>
 
 #if BX_PLATFORM_WINDOWS
@@ -15,24 +18,111 @@
 #include "shaders/essl/s00_vertex.h"
 #include "shaders/essl/s00_fragment.h"
 #undef BGFX_EMBEDDED_SHADER
-#define BGFX_EMBEDDED_SHADER(_name)                                                        \
-	{                                                                                      \
-		#_name,                                                                            \
-		{                                                                                  \
-			BGFX_EMBEDDED_SHADER_ESSL (bgfx::RendererType::OpenGLES,   _name)              \
-			BGFX_EMBEDDED_SHADER_GLSL (bgfx::RendererType::OpenGL,     _name)              \
-			{ bgfx::RendererType::Noop,  (const uint8_t*)"VSH\x5\x0\x0\x0\x0\x0\x0", 10 }, \
-			{ bgfx::RendererType::Count, NULL, 0 }                                         \
-		}                                                                                  \
-	}
+#define BGFX_EMBEDDED_SHADER(_name)                                                                                                                  \
+    {                                                                                                                                                \
+        #_name,                                                                                                                                      \
+        {                                                                                                                                            \
+            BGFX_EMBEDDED_SHADER_ESSL(bgfx::RendererType::OpenGLES, _name)                                                                           \
+            BGFX_EMBEDDED_SHADER_GLSL(bgfx::RendererType::OpenGL, _name){bgfx::RendererType::Noop, (const uint8_t *)"VSH\x5\x0\x0\x0\x0\x0\x0", 10}, \
+                {bgfx::RendererType::Count, NULL, 0}                                                                                                 \
+        }                                                                                                                                            \
+    }
 
 #define WNDW_WIDTH 1600
 #define WNDW_HEIGHT 900
 
-#define BGFX_CONFIG_DEBUG 1
-
 namespace mg
 {
+    struct MyCallback : public bgfx::CallbackI
+    {
+        virtual void fatal(
+            const char *_filePath, uint16_t _line, bgfx::Fatal::Enum _code, const char *_str)
+        {
+            std::cout << "BGFX Fatal Error: " << _str << " in " << _filePath << " at line " << _line << std::endl;
+        }
+
+        virtual void traceVargs(
+            const char *_filePath, uint16_t _line, const char *_format, va_list _argList)
+        {
+            // 先试一个固定大小缓冲区（大多数日志不会太长）
+            char temp[1024];
+            int result = vsprintf_s(temp, sizeof(temp), _format, _argList);
+
+            if (result >= 0)
+            {
+                // 成功
+                printf("BGFX [%s:%d] %s", _filePath, _line, temp);
+            }
+            else
+            {
+                // 缓冲区太小，动态分配（较少见）
+                int len = _vscprintf(_format, _argList);
+                if (len > 0)
+                {
+                    std::vector<char> buffer(len + 1);
+                    vsprintf_s(buffer.data(), buffer.size(), _format, _argList);
+                    printf("BGFX [%s:%d] %s", _filePath, _line, buffer.data());
+                }
+            }
+            fflush(stdout);
+        }
+
+        virtual void profilerBegin(
+            const char *_name, uint32_t _abgr, const char *_filePath, uint16_t _line)
+        {
+            std::cout << "BGFX Profiler Begin: " << _name << std::endl;
+        }
+
+        virtual void profilerBeginLiteral(
+            const char *_name, uint32_t _abgr, const char *_filePath, uint16_t _line)
+        {
+            std::cout << "BGFX Profiler Begin Literal: " << _name << std::endl;
+        }
+
+        virtual void profilerEnd()
+        {
+            std::cout << "BGFX Profiler End" << std::endl;
+        }
+
+        virtual uint32_t cacheReadSize(uint64_t _id)
+        {
+            return 0;
+        }
+
+        virtual bool cacheRead(uint64_t _id, void *_data, uint32_t _size)
+        {
+            return false;
+        }
+
+        virtual void cacheWrite(uint64_t _id, const void *_data, uint32_t _size)
+        {
+            // No-op implementation
+        }
+
+        virtual void screenShot(
+            const char *_filePath, uint32_t _width, uint32_t _height, uint32_t _pitch, const void *_data, uint32_t _size, bool _yflip)
+        {
+            std::cout << "BGFX Screenshot saved to: " << _filePath << std::endl;
+        }
+
+        virtual void captureBegin(
+            uint32_t _width, uint32_t _height, uint32_t _pitch, bgfx::TextureFormat::Enum _format, bool _yflip)
+        {
+            std::cout << "BGFX Capture Begin: " << _width << "x" << _height << std::endl;
+        }
+
+        virtual void captureEnd()
+        {
+            std::cout << "BGFX Capture End" << std::endl;
+        }
+
+        virtual void captureFrame(const void *_data, uint32_t _size)
+        {
+            // No-op implementation
+        }
+    };
+
+    // 初始化时注册
 
     static void glfw_errorCallback(int error, const char *description)
     {
@@ -92,9 +182,9 @@ namespace mg
         bgfxInit.resolution.width = WNDW_WIDTH;
         bgfxInit.resolution.height = WNDW_HEIGHT;
         bgfxInit.resolution.reset = BGFX_RESET_VSYNC;
-
+        MyCallback callback;
+        bgfxInit.callback = &callback;
         bgfx::init(bgfxInit);
-
 
         bgfx::ProgramHandle m_program = loadEmbeddedProgram("s00_vertex", "s00_fragment");
 

@@ -60,6 +60,7 @@ if(MSVC)
     add_compile_options(/Zc:preprocessor)
     add_compile_options(/utf-8)
 endif()
+add_definitions(-DBGFX_CONFIG_DEBUG=1)
 
 add_executable(game ${SOURCES})
 
