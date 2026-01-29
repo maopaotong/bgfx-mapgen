@@ -42,13 +42,30 @@ namespace mg
         {-1.0f, 1.0f, 1.0f, 0xff000000},
         {1.0f, 1.0f, 1.0f, 0xff0000ff},
         {-1.0f, -1.0f, 1.0f, 0xff00ff00},
+        {1.0f, -1.0f, 1.0f, 0xff00ffff},
+        {-1.0f, 1.0f, -1.0f, 0xffff0000},
+        {1.0f, 1.0f, -1.0f, 0xffff00ff},
+        {-1.0f, -1.0f, -1.0f, 0xffffff00},
+        {1.0f, -1.0f, -1.0f, 0xffffffff},
     };
 
     static const uint16_t tlist[] = {
-        0,
-        1,
-        2, //
+        // clang-format off
+        0, 1, 2,
+        1, 3, 2,
+        4, 6, 5,
+        5, 6, 7,
+        0, 2, 4,
+        4, 2, 6,
+        1, 5, 3,
+        5, 7, 3,
+        0, 4, 1,
+        4, 5, 1,
+        2, 3, 6,
+        6, 3, 7,
+        // clang-format on
     };
+
     struct MyCallback : public bgfx::CallbackI
     {
         virtual void fatal(
@@ -227,13 +244,32 @@ namespace mg
         while (!glfwWindowShouldClose(window))
         {
             glfwPollEvents();
-            const bx::Vec3 at = {0.0f, 0.0f, 0.0f};
-            const bx::Vec3 eye = {0.0f, 0.0f, 5.0f};
-            float view[16];
-            bx::mtxLookAt(view, eye, at);
-            float proj[16];
-            bx::mtxProj(proj, 60.0f, float(WNDW_WIDTH) / float(WNDW_HEIGHT), 0.1f, 100.0f, bgfx::getCaps()->homogeneousDepth);
-            bgfx::setViewTransform(0, view, proj);
+            { // view projection matrix
+
+                const bx::Vec3 at = {0.0f, 0.0f, 0.0f};
+                const bx::Vec3 eye = {0.0f, 0.0f, 5.0f};
+
+                float view[16];
+                bx::mtxLookAt(view, eye, at);
+
+                float proj[16];
+                bx::mtxProj(proj, 60.0f, float(WNDW_WIDTH) / float(WNDW_HEIGHT), 0.1f, 100.0f, bgfx::getCaps()->homogeneousDepth);
+                bgfx::setViewTransform(0, view, proj);
+            }
+
+            { // model matrix
+
+                float mtx1[16];
+                bx::mtxScale(mtx1, 0.5f);
+
+                float mtx2[16];
+                bx::mtxRotateXY(mtx2, counter * 0.01f, counter * 0.01f);
+
+                bx::mtxMul(mtx2, mtx2, mtx1);
+
+                bgfx::setTransform(mtx2);
+            }
+
             const bgfx::Stats *stats = bgfx::getStats();
             bgfx::dbgTextPrintf(0, 2, 0x0f, "Backbuffer %dW x %dH in pixels, debug text %dW x %dH in characters.", stats->width, stats->height, stats->textWidth, stats->textHeight);
             bgfx::setVertexBuffer(0, vbh);
