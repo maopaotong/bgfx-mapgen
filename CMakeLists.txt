@@ -15,7 +15,9 @@ if(MSVC)
 endif()
 
 add_subdirectory(fog-util)
-add_subdirectory(game)
+add_subdirectory(example-00)
+add_subdirectory(example-01)
+
     
 
 message(STATUS "C++ Compile Flags: ${COMPILE_FLAGS}")
