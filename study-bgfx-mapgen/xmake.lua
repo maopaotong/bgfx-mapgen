@@ -14,10 +14,11 @@ rule("bgfx_shader")
     on_build_file(function (target, sourcefile, opt)
         --local shaderc = "D:/git/bgfx.cmake/build/cmake/bgfx/Debug/shaderc.exe"
         local ext = path.extension(sourcefile):lower()
-        local shaderc = "shadercDebug"  -- 
+        local basename = path.basename(sourcefile):lower()
+        local shaderc = "shadercDebug" 
         local shader_dir = path.join(os.scriptdir(), "shaders")
         local gen_dir = target:targetdir()
-        local varying = path.join(shader_dir, "varying.def.sc")
+        local varying = path.join(shader_dir, basename .. ".varying.def.sc")
 
         -- 
         local basename = path.basename(sourcefile)
