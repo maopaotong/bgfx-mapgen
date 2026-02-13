@@ -18,7 +18,6 @@ namespace mg
 
         Entity00() : Entity("s00")
         {
-
         }
         int init() override
         {
@@ -36,30 +35,41 @@ namespace mg
             int vCount = 8;
 
             const PosColorVertex *vertices = new PosColorVertex[vCount]{
-                {-1.0f, 1.0f, 1.0f, 0xff000000},
-                {1.0f, 1.0f, 1.0f, 0xff0000ff},
-                {-1.0f, -1.0f, 1.0f, 0xff00ff00},
-                {1.0f, -1.0f, 1.0f, 0xff00ffff},
-                {-1.0f, 1.0f, -1.0f, 0xffff0000},
-                {1.0f, 1.0f, -1.0f, 0xffff00ff},
-                {-1.0f, -1.0f, -1.0f, 0xffffff00},
-                {1.0f, -1.0f, -1.0f, 0xffffffff},
-            };
+                {-1.0f, -1.0f, 1.0f, 0xff00ff00},//0
+                {1.0f, -1.0f, 1.0f, 0xff00ffff},//1
+                {1.0f, 1.0f, 1.0f, 0xff0000ff},//2
+                {-1.0f, 1.0f, 1.0f, 0xff000000},//3
+                {-1.0f, -1.0f, -1.0f, 0xffffff00},//4
+                {1.0f, -1.0f, -1.0f, 0xffffffff},//5
+                {1.0f, 1.0f, -1.0f, 0xffff00ff},//6
+                {-1.0f, 1.0f, -1.0f, 0xffff0000},//7
+            };            
+            /*                              ^
+                  7--------6              y |
+                 /|       /|                |
+                3--------2 |                | 
+                | |      | |                |             x
+                | 4------|-5                +-------------->      
+                |/       |/                /
+                0--------1                z
+            */
             int iCount = 3 * 12;
             const uint16_t *tlist = new uint16_t[iCount]{
                 // clang-format off
+                0, 2, 3,
                 0, 1, 2,
-                1, 3, 2,
-                4, 6, 5,
-                5, 6, 7,
-                0, 2, 4,
-                4, 2, 6,
-                1, 5, 3,
-                5, 7, 3,
-                0, 4, 1,
-                4, 5, 1,
-                2, 3, 6,
-                6, 3, 7,
+                1, 6, 2,
+                1, 5, 6,
+                3, 6, 7,
+                3, 2, 6,//
+                5, 7, 6,
+                5, 4, 7,
+                4, 3, 7,
+                4, 0, 3,
+                0, 4, 5,
+                0, 5, 1,
+                /*
+                */
                 // clang-format on
             };
 
@@ -79,6 +89,8 @@ namespace mg
             bx::mtxRotateXY(mtx2, counter * 0.01f, counter * 0.01f);
             bx::mtxMul(mtx2, mtx2, mtx1);
             bgfx::setTransform(mtx2);
+
+            // bgfx::setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_DEPTH_TEST_LESS, 0);
 
             counter++;
             Entity::submit(viewId);

@@ -65,12 +65,16 @@ namespace mg
         bgfx::setViewClear(v0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x443355FF, 1.0f, 0);
         bgfx::setViewRect(v0, 0, 0, bgfx::BackbufferRatio::Equal);
 
-        bgfx::setDebug(BGFX_DEBUG_TEXT | BGFX_DEBUG_STATS | BGFX_DEBUG_PROFILER);
+        bgfx::setDebug(BGFX_DEBUG_TEXT        //
+                       | BGFX_DEBUG_STATS     //
+                       | BGFX_DEBUG_PROFILER  //
+                       | BGFX_DEBUG_WIREFRAME //
+        );
         // bgfx::touch(v0);
 
-        ListRenderable list ;
+        ListRenderable list;
         list.list.push_back(new Entity00());
-        list.list.push_back(new Entity01());        
+        list.list.push_back(new Entity01());
         list.init();
 
         const bx::Vec3 at = {0.0f, 0.0f, 0.0f};
@@ -85,7 +89,7 @@ namespace mg
         // main loop
         while (!glfwWindowShouldClose(window))
         {
-            glfwPollEvents();            
+            glfwPollEvents();
             list.submit(0);
 
             bgfx::frame();

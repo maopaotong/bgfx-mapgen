@@ -43,7 +43,7 @@ namespace mg
             ElevationGen::Args eArgs;
             ElevationGen eGen{mesh, map.elevation_t, map.elevation_r};
             eGen.assignElevation(constraints, eArgs);
-            
+
             std::vector<float> &elevation_r = map.elevation_r;
 
             unsigned int vCount = mesh.numRegions;
@@ -79,9 +79,12 @@ namespace mg
                 .add(bgfx::Attrib::TexCoord1, 2, bgfx::AttribType::Float)
                 .end();
 
-            vbh = bgfx::createVertexBuffer(bgfx::makeRef(vData, sizeof(Vertex)*vCount, [](void * mData, void * uData){ delete[] static_cast<Vertex*>(mData); }), vlayout);
-            ibh = bgfx::createIndexBuffer(bgfx::makeRef(iData, sizeof(unsigned int) * iCount,[](void * mData, void * uData){ delete[] static_cast<unsigned int*>(mData); }));
-            bx::mtxScale(mtx1, 0.5f);            
+            vbh = bgfx::createVertexBuffer(bgfx::makeRef(vData, sizeof(Vertex) * vCount, [](void *mData, void *uData)
+                                                         { delete[] static_cast<Vertex *>(mData); }),
+                                           vlayout);
+            ibh = bgfx::createIndexBuffer(bgfx::makeRef(iData, sizeof(unsigned int) * iCount, [](void *mData, void *uData)
+                                                        { delete[] static_cast<unsigned int *>(mData); }));
+            bx::mtxScale(mtx1, 0.5f);
 
             uHandle = bgfx::createUniform("s_colorMap", bgfx::UniformType::Sampler);
             texHandle = ColorMap::createTexture();
@@ -93,6 +96,8 @@ namespace mg
             bx::mtxMul(mtx2, mtx2, mtx1);
             bgfx::setTransform(mtx2);
             //
+            bgfx::setState(BGFX_STATE_DEFAULT | BGFX_STATE_PT_LINES);
+
             bgfx::setTexture(0, uHandle, texHandle);
             counter++;
             Entity::submit(viewId);
