@@ -16,6 +16,8 @@ namespace mg
         unsigned int counter = 0;
         float mtx1[16];
         float mtx2[16];
+        float mtx3[16];
+
         Entity(std::string shader) : shader(shader)
         {
         }
