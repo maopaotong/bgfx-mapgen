@@ -9,7 +9,7 @@ namespace mg
     struct Entity01 : public Entity
     {
 
-        Entity01() : Entity("s01")
+        Entity01() : Entity(0, "s01")
         {
         }
         int init() override
@@ -78,7 +78,7 @@ namespace mg
             return 0;
         }
         
-        void submit(int viewId) override
+        void submit() override
         {
             //bx::mtxRotateXY(mtx2, counter * 0.01f, counter * 0.01f);
             bgfx::setTransform(mtx3);
@@ -95,7 +95,7 @@ namespace mg
                 //| BGFX_STATE_PT_POINTS //
                 ;
             bgfx::setState(state);
-            Entity::submit(viewId);
+            Entity::submit();
             counter++;
         }
     };

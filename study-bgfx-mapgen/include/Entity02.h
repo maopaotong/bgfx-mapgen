@@ -1,7 +1,7 @@
 #pragma once
 #include "renderable.h"
 #include "mapgen.h"
-
+#include "Views.h"
 #define DEBUG_SHOW_TRIANGLES_COUNT 100
 
 namespace mg
@@ -24,7 +24,7 @@ namespace mg
         bgfx::TextureHandle texHandle;
         bgfx::UniformHandle uHandle;
 
-        Entity02() : Entity("s02")
+        Entity02() : Entity(View1::VID, "s02")
         {
         }
         int init() override
@@ -96,7 +96,7 @@ namespace mg
             texHandle = ColorMap::createTexture();
             return 0;
         }
-        void submit(int viewId) override
+        void submit() override
         {
             //bx::mtxRotateXY(mtx2, counter * 0.01f, counter * 0.01f);
             bx::mtxIdentity(mtx2);
@@ -117,7 +117,7 @@ namespace mg
                                                           //| BGFX_STATE_PT_POINTS //
                 ;
             bgfx::setState(state);
-            Entity::submit(viewId);
+            Entity::submit();
             counter++;
         }
     };

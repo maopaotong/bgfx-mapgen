@@ -2,6 +2,7 @@
 #include "renderable.h"
 #include "Common.h"
 #include <array>
+#include "Views.h"
 
 namespace mg
 {
@@ -9,7 +10,7 @@ namespace mg
     struct Entity00 : public Entity
     {
 
-        Entity00() : Entity("s00")
+        Entity00() : Entity(View0::VID, "s00")
         {
         }
         int init() override
@@ -62,7 +63,7 @@ namespace mg
             return 0;
         }
         
-        void submit(int viewId) override
+        void submit() override
         {
             bx::mtxRotateXY(mtx2, counter * 0.01f, counter * 0.01f);
             bx::mtxMul(mtx3, mtx2, mtx1);
@@ -80,7 +81,7 @@ namespace mg
                 //| BGFX_STATE_PT_POINTS //
                 ;
             bgfx::setState(state);
-            Entity::submit(viewId);
+            Entity::submit();
             counter++;
         }
     };

@@ -20,11 +20,11 @@ namespace mg
             }
             return 0;
         }
-        void submit(int viewId) override
+        void submit() override
         {
             for (Renderable *r : list)
             {
-                r->submit(viewId);
+                r->submit();
             }
         }
         void destroy() override

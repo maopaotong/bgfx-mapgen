@@ -7,6 +7,7 @@ namespace mg
 
     struct Entity : public Renderable
     {
+        bgfx::ViewId vid;
         std::string shader;
         bgfx::ProgramHandle program;
         bgfx::VertexLayout vlayout;
@@ -18,7 +19,7 @@ namespace mg
         float mtx2[16];
         float mtx3[16];
 
-        Entity(std::string shader) : shader(shader)
+        Entity(bgfx::ViewId vid, std::string shader) : shader(shader),vid(vid)
         {
         }
 
@@ -38,11 +39,11 @@ namespace mg
             return 0;
         }
 
-        virtual void submit(int viewId) override
+        virtual void submit() override
         {            
             bgfx::setVertexBuffer(0, vbh);
             bgfx::setIndexBuffer(ibh);
-            bgfx::submit(viewId, program);
+            bgfx::submit(vid, program);
         }
         virtual void destroy() override
         {
