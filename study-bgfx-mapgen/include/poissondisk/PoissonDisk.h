@@ -25,7 +25,7 @@
 #include <algorithm>
 #include <numbers>
 
-namespace mg
+namespace poissondisk
 {
     struct PoissonDisk
     {

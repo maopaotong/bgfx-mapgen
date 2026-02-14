@@ -13,20 +13,17 @@
 #endif
 #include <GLFW/glfw3native.h>
 
-#include "FileUtil.h"
+#include "util/FileUtil.h"
 
 #include <bgfx/embedded_shader.h>
 #include <stdint.h>
 #include <bx/math.h>
 #include "MyCallback.h"
-#include "ColorMap.h"
-#include "DualMap.h"
-#include "DualMesh.h"
-#include "ShaderUtil.h"
-#include "LogUtil.h"
+#include "mapgen.h"
+#include "util.h"
+#include "renderable.h"
 #include "Entity00.h"
 #include "Entity01.h"
-#include "ListRenderable.h"
 
 #define WNDW_WIDTH 1600
 #define WNDW_HEIGHT 900

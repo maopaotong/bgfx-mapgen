@@ -1,10 +1,6 @@
 #pragma once
-#include "Entity.h"
-#include "Common.h"
-#include "DualMesh.h"
-#include "DualMap.h"
-#include "ElevationGen.h"
-#include "MapGen.h"
+#include "renderable.h"
+#include "mapgen.h"
 namespace mg
 {
 
@@ -96,7 +92,7 @@ namespace mg
             bx::mtxMul(mtx2, mtx2, mtx1);
             bgfx::setTransform(mtx2);
             //
-            bgfx::setState(BGFX_STATE_DEFAULT | BGFX_STATE_PT_LINES);
+            //bgfx::setState(BGFX_STATE_DEFAULT | BGFX_STATE_PT_LINES);
 
             bgfx::setTexture(0, uHandle, texHandle);
             counter++;

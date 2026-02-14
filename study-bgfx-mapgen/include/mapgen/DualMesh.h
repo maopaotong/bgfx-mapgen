@@ -1,6 +1,6 @@
 #pragma once
 #include <array>
-#include "delaunator/delaunator.h"
+#include "../delaunator/delaunator.h"
 
 namespace mg
 {

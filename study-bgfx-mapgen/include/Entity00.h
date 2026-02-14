@@ -1,5 +1,5 @@
 #pragma once
-#include "Entity.h"
+#include "renderable.h"
 #include <array>
 
 namespace mg
