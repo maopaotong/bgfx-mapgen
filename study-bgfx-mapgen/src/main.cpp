@@ -44,7 +44,7 @@ namespace mg
         glfwInit();
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        GLFWwindow *window = glfwCreateWindow(1024, 768, "Hello.bgfx", nullptr, nullptr);
+        GLFWwindow *window = glfwCreateWindow(WNDW_WIDTH, WNDW_HEIGHT, "Hello.bgfx", nullptr, nullptr);
 
         bgfx::Init bgfxInit;
         bgfxInit.type = bgfx::RendererType::OpenGL;
@@ -71,7 +71,7 @@ namespace mg
         // bgfx::touch(v0);
 
         ListRenderable list;
-        //list.list.push_back(new Entity00());
+        // list.list.push_back(new Entity00());
         list.list.push_back(new Entity01());
         list.list.push_back(new Entity02());
 
@@ -79,18 +79,23 @@ namespace mg
 
         // const bx::Vec3 eye = {0.0f, 0.0f, -150.0f};//z as camera position
         // bx::Handedness::Enum handedness = bx::Handedness::Right;
-        const bx::Vec3 eye = {0.0f, 0.0f, 150.0f}; // z as camera position
+        const bx::Vec3 eye = {0.0f, 0.0f, 100.0f}; // z as camera position
         const bx::Vec3 at = {0.0f, 0.0f, 0.0f};    // zero
         const bx::Vec3 up = {0.0f, 1.0f, 0.0f};    // y as up
         float view[16];
         MtxUtil::mtxLookAt(view, eye, at, up);
-        
+
         // printf("View matrix right vector: (%f, %f, %f)\n", view[0], view[4], view[8]);
-        printf("Right vector: (%f, %f, %f)\n", view[0], view[1], view[2]);
 
         float proj[16];
         bx::mtxProj(proj, 60.0f, float(WNDW_WIDTH) / float(WNDW_HEIGHT), 0.1f, PROJ_FAR, bgfx::getCaps()->homogeneousDepth);
         bgfx::setViewTransform(0, view, proj);
+        printf("View matrix:\n");
+        for (int i = 0; i < 4; ++i)
+        {
+            printf("  [%f, %f, %f, %f]\n",
+                   view[i * 4 + 0], view[i * 4 + 1], view[i * 4 + 2], view[i * 4 + 3]);
+        }
         // main loop
         while (!glfwWindowShouldClose(window))
         {

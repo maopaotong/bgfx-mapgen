@@ -50,7 +50,7 @@ namespace mg
             unsigned int vCount = mesh.numRegions;
             unsigned int iCount = mesh.numSolidSides;
             //
-            iCount = 3 * DEBUG_SHOW_TRIANGLES_COUNT;
+            //iCount = 3 * DEBUG_SHOW_TRIANGLES_COUNT;
             Vertex *vData = new Vertex[vCount];
 
             for (int r = 0; r < mesh.numRegions; r++)
@@ -98,7 +98,8 @@ namespace mg
         }
         void submit(int viewId) override
         {
-            bx::mtxRotateXY(mtx2, counter * 0.01f, counter * 0.01f);
+            //bx::mtxRotateXY(mtx2, counter * 0.01f, counter * 0.01f);
+            bx::mtxIdentity(mtx2);
             //bx::mtxRotateXY(mtx2, 0 * 0.01f, 0 * 0.01f);
             bx::mtxMul(mtx3, mtx2, mtx1);
             bgfx::setTransform(mtx3);

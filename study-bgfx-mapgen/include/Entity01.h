@@ -72,7 +72,7 @@ namespace mg
             ibh = bgfx::createIndexBuffer(bgfx::makeRef(tlist, iCount * sizeof(uint16_t), [](void *mData, void *uData)
                                                         { delete[] static_cast<uint16_t *>(mData); }));
 
-            bx::mtxScale(mtx1, 10.0f, 10.0f, 10.0f);            
+            bx::mtxScale(mtx1, 1.0f, 1.0f, 1.0f);            
             bx::mtxIdentity(mtx2);            
             bx::mtxMul(mtx3, mtx2, mtx1);
             return 0;

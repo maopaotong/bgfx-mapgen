@@ -5,7 +5,7 @@ $input a_texcoord1
 $output v_uv0
 $output v_uv1
 
-#include <bgfx_shader.sh>
+#include <../bgfx_shader.sh>
 void main()
 {
 	gl_Position = mul(u_modelViewProj, vec4(a_position, 1.0) );
