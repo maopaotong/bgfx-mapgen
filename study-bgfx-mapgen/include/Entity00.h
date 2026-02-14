@@ -35,21 +35,21 @@ namespace mg
             int vCount = 8;
 
             const PosColorVertex *vertices = new PosColorVertex[vCount]{
-                {-1.0f, -1.0f, 1.0f, 0xff00ff00},//0
-                {1.0f, -1.0f, 1.0f, 0xff00ffff},//1
-                {1.0f, 1.0f, 1.0f, 0xff0000ff},//2
-                {-1.0f, 1.0f, 1.0f, 0xff000000},//3
-                {-1.0f, -1.0f, -1.0f, 0xffffff00},//4
-                {1.0f, -1.0f, -1.0f, 0xffffffff},//5
-                {1.0f, 1.0f, -1.0f, 0xffff00ff},//6
-                {-1.0f, 1.0f, -1.0f, 0xffff0000},//7
-            };            
+                {-1.0f, -1.0f, 1.0f, 0xff00ff00},  // 0
+                {1.0f, -1.0f, 1.0f, 0xff00ffff},   // 1
+                {1.0f, 1.0f, 1.0f, 0xff0000ff},    // 2
+                {-1.0f, 1.0f, 1.0f, 0xff000000},   // 3
+                {-1.0f, -1.0f, -1.0f, 0xffffff00}, // 4
+                {1.0f, -1.0f, -1.0f, 0xffffffff},  // 5
+                {1.0f, 1.0f, -1.0f, 0xffff00ff},   // 6
+                {-1.0f, 1.0f, -1.0f, 0xffff0000},  // 7
+            };
             /*                              ^
                   7--------6              y |
                  /|       /|                |
-                3--------2 |                | 
+                3--------2 |                |
                 | |      | |                |             x
-                | 4------|-5                +-------------->      
+                | 4------|-5                +-------------->
                 |/       |/                /
                 0--------1                z
             */
@@ -79,7 +79,7 @@ namespace mg
             ibh = bgfx::createIndexBuffer(bgfx::makeRef(tlist, iCount * sizeof(uint16_t), [](void *mData, void *uData)
                                                         { delete[] static_cast<uint16_t *>(mData); }));
 
-            bx::mtxScale(mtx1, 0.5f);
+            bx::mtxScale(mtx1, 1.0f, 1.0f, 1.0f);
 
             return 0;
         }
@@ -92,8 +92,18 @@ namespace mg
 
             // bgfx::setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_DEPTH_TEST_LESS, 0);
 
-            counter++;
+            uint64_t state = 0                            //
+                             | BGFX_STATE_WRITE_RGB       //
+                             | BGFX_STATE_WRITE_A         //
+                             | BGFX_STATE_WRITE_Z         //
+                             | BGFX_STATE_DEPTH_TEST_LESS //
+                             | BGFX_STATE_CULL_CCW        //
+                //| BGFX_STATE_MSAA            //
+                //| BGFX_STATE_PT_POINTS //
+                ;
+            bgfx::setState(state);
             Entity::submit(viewId);
+            counter++;
         }
     };
 

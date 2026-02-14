@@ -1,8 +1,12 @@
 #pragma once
 #include "renderable.h"
 #include "mapgen.h"
+
+#define DEBUG_SHOW_TRIANGLES_COUNT 100
+
 namespace mg
 {
+
 
     struct Entity01 : public Entity
     {
@@ -19,6 +23,7 @@ namespace mg
 
         bgfx::TextureHandle texHandle;
         bgfx::UniformHandle uHandle;
+
         Entity01() : Entity("s01")
         {
         }
@@ -44,8 +49,8 @@ namespace mg
 
             unsigned int vCount = mesh.numRegions;
             unsigned int iCount = mesh.numSolidSides;
-            unsigned int vSize = 3 + 2 + 2; //
-
+            //
+            iCount = 3 * DEBUG_SHOW_TRIANGLES_COUNT;
             Vertex *vData = new Vertex[vCount];
 
             for (int r = 0; r < mesh.numRegions; r++)
@@ -60,13 +65,18 @@ namespace mg
                 vData[vIdx].v1 = mesh.y_of_r(r);
             } //
 
-            unsigned int *iData = new unsigned int[iCount];
-            int iIdx = 0;
-            int len = mesh.numSolidSides;
-            for (int s = 0; s < len; s++)
+            uint16_t *iData = new uint16_t[iCount];
+            
+
+            for (int i = 0; i < iCount; i++)
             {
-                iData[len - iIdx - 1] = mesh._triangles[s];
-                iIdx++;
+                iData[i] = mesh._triangles[i];
+
+                std::cout << iData[i] << "(" << vData[iData[i]].x << "," << vData[iData[i]].y << "),";
+                if (i % 3 == 2)
+                {
+                    std::cout << std::endl;
+                }
             }
 
             vlayout.begin()
@@ -78,9 +88,9 @@ namespace mg
             vbh = bgfx::createVertexBuffer(bgfx::makeRef(vData, sizeof(Vertex) * vCount, [](void *mData, void *uData)
                                                          { delete[] static_cast<Vertex *>(mData); }),
                                            vlayout);
-            ibh = bgfx::createIndexBuffer(bgfx::makeRef(iData, sizeof(unsigned int) * iCount, [](void *mData, void *uData)
-                                                        { delete[] static_cast<unsigned int *>(mData); }));
-            bx::mtxScale(mtx1, 0.5f);
+            ibh = bgfx::createIndexBuffer(bgfx::makeRef(iData, sizeof(uint16_t) * iCount, [](void *mData, void *uData)
+                                                        { delete[] static_cast<uint16_t *>(mData); }));
+            bx::mtxScale(mtx1, 1.0f, 1.0f, 1.0f); //
 
             uHandle = bgfx::createUniform("s_colorMap", bgfx::UniformType::Sampler);
             texHandle = ColorMap::createTexture();
@@ -89,14 +99,25 @@ namespace mg
         void submit(int viewId) override
         {
             bx::mtxRotateXY(mtx2, counter * 0.01f, counter * 0.01f);
+            //bx::mtxRotateXY(mtx2, 0 * 0.01f, 0 * 0.01f);
             bx::mtxMul(mtx2, mtx2, mtx1);
             bgfx::setTransform(mtx2);
             //
-            //bgfx::setState(BGFX_STATE_DEFAULT | BGFX_STATE_PT_LINES);
+            // bgfx::setState(BGFX_STATE_DEFAULT | BGFX_STATE_PT_LINES);
 
             bgfx::setTexture(0, uHandle, texHandle);
-            counter++;
+            uint64_t state = 0                            //
+                             | BGFX_STATE_WRITE_RGB       //
+                             | BGFX_STATE_WRITE_A         //
+                             | BGFX_STATE_WRITE_Z         //
+                             | BGFX_STATE_DEPTH_TEST_LESS //
+                             | BGFX_STATE_CULL_CW        //
+                                                          //| BGFX_STATE_MSAA            //
+                                                          //| BGFX_STATE_PT_POINTS //
+                ;
+            bgfx::setState(state);
             Entity::submit(viewId);
+            counter++;
         }
     };
 

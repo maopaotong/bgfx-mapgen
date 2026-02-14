@@ -16,7 +16,6 @@ namespace mg
         unsigned int counter = 0;
         float mtx1[16];
         float mtx2[16];
-
         Entity(std::string shader) : shader(shader)
         {
         }
@@ -38,16 +37,7 @@ namespace mg
         }
 
         virtual void submit(int viewId) override
-        {
-            uint64_t state = 0                            //
-                             | BGFX_STATE_WRITE_RGB       //
-                             | BGFX_STATE_WRITE_A         //
-                             | BGFX_STATE_WRITE_Z         //
-                             | BGFX_STATE_DEPTH_TEST_LESS //
-                             | BGFX_STATE_CULL_CCW        //
-                             //| BGFX_STATE_MSAA            //
-                ;
-            bgfx::setState(state);
+        {            
             bgfx::setVertexBuffer(0, vbh);
             bgfx::setIndexBuffer(ibh);
             bgfx::submit(viewId, program);

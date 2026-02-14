@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 
+#define DEFAULT_MESH_WIDTH 100
 namespace mg
 {
     struct Args
@@ -14,7 +15,7 @@ namespace mg
         int retries = 6;
         unsigned int seed = 12345;
         //
-        Args() : meshWidth(1000) //
+        Args() : meshWidth(DEFAULT_MESH_WIDTH) //
         {
 
         };
