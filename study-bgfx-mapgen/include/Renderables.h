@@ -8,32 +8,52 @@
 namespace mg
 {
 
+    template <typename... Ts>
     struct Renderables
     {
 
-        Entity00 r00;
-        Entity01 r01;
-        Entity02 r02;
+        std::tuple<Ts...> renderables;
+
+        Renderables()
+        {
+        }
 
         int init()
         {
-            int err0 = r00.init();
-            int err1 = r01.init();
-            int err2 = r02.init();
-            return (err0 && err1 && err2) ? -1 : 0;
+            int es = 0;
+            std::apply([&es, this](Ts &...e)
+                       {
+                           ([&es, &e]()
+                            {
+                                int err = e.init();
+                                if (err)
+                                {
+                                    es++;
+                                } //
+                            }(),
+                            ...); //
+                       },
+                       renderables);
+            return es > 0 ? -1 : 0;
         }
 
         void submit()
         {
-            r00.submit();
-            r01.submit();
-            r02.submit();
+            std::apply([](Ts &...e)
+                       { (e.submit(), ...); }, renderables);
         }
         void destroy()
         {
-            r00.destroy();
-            r01.destroy();
-            r02.destroy();
+            std::apply([](Ts &...e)
+                       { (e.destroy(), ...); }, renderables);
         }
     };
+
+    struct AllRenderables : public Renderables<Entity00, Entity01, Entity02>
+    {
+        INJECT(AllRenderables())
+        {
+        }
+    };
+
 };

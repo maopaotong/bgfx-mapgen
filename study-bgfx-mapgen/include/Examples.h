@@ -42,8 +42,9 @@ namespace mg
         }
 
         Views& views;
+        AllRenderables & list;
 
-        INJECT(Example(Views&views)):views(views){
+        INJECT(Example(Views&views, AllRenderables& list)):list(list),views(views){
 
         }
 
@@ -78,8 +79,7 @@ namespace mg
                            | BGFX_DEBUG_WIREFRAME //
             );
             // bgfx::touch(v0);
-
-            Renderables list;
+            
 
             list.init();
 

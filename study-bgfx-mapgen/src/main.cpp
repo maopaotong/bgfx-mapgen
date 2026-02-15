@@ -7,9 +7,10 @@ namespace mg
     {
         fog::Injector injector;
 
-        injector.bindAllImpl<Example, //
-                             Views,   //
-                             Args     //
+        injector.bindAllImpl<Example,     //
+                             Views,       //
+                             AllRenderables, //
+                             Args         //
                              >();
         Example *example = injector.get<Example>();
 
