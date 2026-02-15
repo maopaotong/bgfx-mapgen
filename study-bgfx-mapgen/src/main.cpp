@@ -21,7 +21,7 @@
 #include "MyCallback.h"
 #include "mapgen.h"
 #include "util.h"
-#include "renderable.h"
+#include "Renderables.h"
 #include "Entity00.h"
 #include "Entity01.h"
 #include "Entity02.h"
@@ -68,11 +68,8 @@ namespace mg
         );
         // bgfx::touch(v0);
 
-        ListRenderable list;
-        // list.list.push_back(new Entity00());
-        list.list.push_back(new Entity01());
-        list.list.push_back(new Entity02());
-
+        Renderables list;
+        
         list.init();
 
         // main loop

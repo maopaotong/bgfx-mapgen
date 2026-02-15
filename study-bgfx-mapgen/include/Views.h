@@ -74,7 +74,7 @@ namespace mg
             const bx::Vec3 at = {0.0f, 0.0f, 0.0f};    // zero
             const bx::Vec3 up = {0.0f, 1.0f, 0.0f};    // y as up
             MtxUtil::mtxLookAt(view, eye, at, up);
-            bx::mtxProj(proj, 60.0f, float(WNDW_WIDTH) / float(WNDW_HEIGHT), 0.1f, PROJ_FAR, bgfx::getCaps()->homogeneousDepth);
+            bx::mtxOrtho(proj, 0.0f, 1.0f, 0.0f, 1.0f, 0.1f, PROJ_FAR, 0.0f, bgfx::getCaps()->homogeneousDepth);
 
             printf("View matrix:\n");
             for (int i = 0; i < 4; ++i)
