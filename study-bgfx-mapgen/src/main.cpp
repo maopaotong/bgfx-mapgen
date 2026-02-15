@@ -26,6 +26,7 @@
 #include "Entity01.h"
 #include "Entity02.h"
 #include "Views.h"
+#include "fg/util/Injector.h"
 
 namespace mg
 {
@@ -94,5 +95,7 @@ namespace mg
 
 int main(int argc, char **argv)
 {
+    fog::Injector injector;
+
     return mg::_main(argc, argv);
 }
