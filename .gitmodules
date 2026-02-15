@@ -1,6 +1,3 @@
-[submodule "fog-util"]
-	path = fog-util
-	url = git@github.com:maopaotong/fog-util.git
 [submodule "study-bgfx-mapgen/fog-util"]
 	path = study-bgfx-mapgen/fog-util
 	url = git@github.com:maopaotong/fog-util.git
