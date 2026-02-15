@@ -41,10 +41,10 @@ namespace mg
             std::cout << "GLFW error:" << description << std::endl;
         }
 
-        Views& views;
+        AllViews& views;
         AllRenderables & list;
 
-        INJECT(Example(Views&views, AllRenderables& list)):list(list),views(views){
+        INJECT(Example(AllViews&views, AllRenderables& list)):list(list),views(views){
 
         }
 

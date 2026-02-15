@@ -2,37 +2,19 @@
 
 #include <bx/bx.h>
 #include <bgfx/bgfx.h>
-#include "util.h"
+#include "renderable.h"
 
 #define WNDW_WIDTH 1600
 #define WNDW_HEIGHT 900
 #define PROJ_FAR 1000000
 namespace mg
 {
-    struct View
-    {
-        float view[16];
-        float proj[16];
-        bgfx::ViewId vid;
-
-        View(bgfx::ViewId _vid) : vid(_vid)
-        {
-        }
-
-        virtual void init() = 0;
-
-        void update()
-        {
-            bgfx::setViewTransform(vid, view, proj);
-            // printf("View matrix right vector: (%f, %f, %f)\n", view[0], view[4], view[8]);
-        }
-    };
     struct View0 : public View
     {
         // const bx::Vec3 eye = {0.0f, 0.0f, -150.0f};//z as camera position
         // bx::Handedness::Enum handedness = bx::Handedness::Right;
         static constexpr bgfx::ViewId VID = 0;
-        View0() : View(VID)
+        INJECT(View0()) : View(VID)
         {
         }
         void init() override
@@ -61,7 +43,7 @@ namespace mg
         static constexpr bgfx::ViewId VID = 1;
         // const bx::Vec3 eye = {0.0f, 0.0f, -150.0f};//z as camera position
         // bx::Handedness::Enum handedness = bx::Handedness::Right;
-        View1() : View(VID)
+        INJECT(View1()) : View(VID)
         {
         }
         void init() override
@@ -74,7 +56,7 @@ namespace mg
             const bx::Vec3 at = {0.0f, 0.0f, 0.0f};    // zero
             const bx::Vec3 up = {0.0f, 1.0f, 0.0f};    // y as up
             MtxUtil::mtxLookAt(view, eye, at, up);
-            bx::mtxOrtho(proj, 0.0f, 200.0f, 0.0f, 200.0f, 0.1f, PROJ_FAR, 0.0f, bgfx::getCaps()->homogeneousDepth);
+            bx::mtxOrtho(proj, 0.0f, 100.0f, 0.0f, 100.0f, 0.1f, PROJ_FAR, 0.0f, bgfx::getCaps()->homogeneousDepth);
 
             printf("View matrix:\n");
             for (int i = 0; i < 4; ++i)
@@ -85,23 +67,10 @@ namespace mg
         }
     };
 
-    struct Views
+    struct AllViews : public ViewTuple<View0, View1>
     {
-
-        View0 view0;
-        View1 view1;
-        INJECT(Views()){
-
-        }
-        void init()
+        INJECT(AllViews(View0 *v0, View1 *v1)) : ViewTuple(v0, v1)
         {
-            view0.init();
-            view1.init();
-        }
-        void update()
-        {
-            view0.update();
-            view1.update();
         }
     };
 

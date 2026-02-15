@@ -1,5 +1,5 @@
 #include "Examples.h"
-
+#include "Renderables.h"
 namespace mg
 {
 
@@ -7,10 +7,15 @@ namespace mg
     {
         fog::Injector injector;
 
-        injector.bindAllImpl<Example,     //
-                             Views,       //
+        injector.bindAllImpl<Example, //
+                             View0,
+                             View1,
+                             AllViews, //
+                             Entity00, //
+                             Entity01, //
+                             Entity02,
                              AllRenderables, //
-                             Args         //
+                             Args            //
                              >();
         Example *example = injector.get<Example>();
 
