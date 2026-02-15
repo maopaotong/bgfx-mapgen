@@ -16,7 +16,7 @@ namespace mg
 
         std::tuple<Ts*...> tuple;
 
-        RenderableTuple(Ts*... rs):tuple(rs...)
+        INJECT(RenderableTuple(Ts*... rs)):tuple(rs...)
         {
         }
 

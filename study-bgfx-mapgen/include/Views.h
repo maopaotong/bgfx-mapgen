@@ -67,11 +67,4 @@ namespace mg
         }
     };
 
-    struct AllViews : public ViewTuple<View0, View1>
-    {
-        INJECT(AllViews(View0 *v0, View1 *v1)) : ViewTuple(v0, v1)
-        {
-        }
-    };
-
 };

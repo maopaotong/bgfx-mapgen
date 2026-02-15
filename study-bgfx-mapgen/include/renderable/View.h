@@ -26,16 +26,15 @@ namespace mg
             bgfx::setViewTransform(vid, view, proj);
         }
     };
-    
+
     template <typename... Ts>
     struct ViewTuple
     {
 
-        std::tuple<Ts*...> tuple;
+        std::tuple<Ts *...> tuple;
 
-        ViewTuple(Ts*...views):tuple(views...)
+        INJECT(ViewTuple(Ts *...views)) : tuple(views...)
         {
-
         }
         void init()
         {

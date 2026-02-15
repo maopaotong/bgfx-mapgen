@@ -22,7 +22,6 @@
 #include "MyCallback.h"
 #include "mapgen.h"
 #include "util.h"
-#include "Renderables.h"
 #include "Entity00.h"
 #include "Entity01.h"
 #include "Entity02.h"
@@ -32,6 +31,8 @@
 
 namespace mg
 {
+    using AllRenderables = RenderableTuple<Entity00, Entity01, Entity02> ;
+    using AllViews = ViewTuple<View0, View1>;
     struct Example
     {
 

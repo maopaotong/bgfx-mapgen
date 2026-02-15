@@ -1,5 +1,4 @@
 #include "Examples.h"
-#include "Renderables.h"
 namespace mg
 {
 
