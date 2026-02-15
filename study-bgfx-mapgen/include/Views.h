@@ -90,6 +90,9 @@ namespace mg
 
         View0 view0;
         View1 view1;
+        INJECT(Views()){
+
+        }
         void init()
         {
             view0.init();

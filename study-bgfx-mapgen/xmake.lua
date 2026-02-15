@@ -78,5 +78,7 @@ target("game")
     add_packages("bgfx", "glfw", "bx","fmt")    
     add_includedirs("include")
     add_includedirs("fog-util/include")
-    set_languages("c++20")
+    set_languages("c++17")
+    --set_languages("c++20")
+    
     

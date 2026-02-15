@@ -23,7 +23,13 @@
 #include <cmath>
 #include <cassert>
 #include <algorithm>
+
+#if __cplusplus >= 202002L
 #include <numbers>
+#define M_PI std::numbers::pi
+#else
+#define M_PI 3.14159265358979323846
+#endif
 
 namespace poissondisk
 {
@@ -152,7 +158,7 @@ namespace poissondisk
             {
                 std::vector<Point> active_list(points_.begin(), points_.end());
 
-                std::uniform_real_distribution<double> angle_dist(0.0, 2.0 * std::numbers::pi);
+                std::uniform_real_distribution<double> angle_dist(0.0, 2.0 * M_PI);
                 std::uniform_real_distribution<double> radius_dist(min_dist_, 2.0 * min_dist_);
 
                 while (!active_list.empty())
