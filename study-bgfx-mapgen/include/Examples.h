@@ -31,7 +31,7 @@
 
 namespace mg
 {
-    using AllRenderables = RenderableTuple<Entity00, Entity01, Entity02> ;
+    using AllRenderables = RenderableTuple<Entity02>;
     using AllViews = ViewTuple<View0, View1>;
     struct Example
     {
@@ -42,15 +42,15 @@ namespace mg
             std::cout << "GLFW error:" << description << std::endl;
         }
 
-        AllViews& views;
-        AllRenderables & list;
+        AllViews &views;
+        AllRenderables &list;
 
-        INJECT(Example(AllViews&views, AllRenderables& list)):list(list),views(views){
-
+        INJECT(Example(AllViews &views, AllRenderables &list)) : list(list), views(views)
+        {
         }
 
         int run()
-        {           
+        {
 
             std::cout << std::filesystem::current_path() << std::endl;
             glfwSwapInterval(1); // Enable vsync
@@ -74,13 +74,12 @@ namespace mg
 
             views.init();
 
-            bgfx::setDebug(BGFX_DEBUG_TEXT        //
-                           | BGFX_DEBUG_STATS     //
-                           | BGFX_DEBUG_PROFILER  //
-                           | BGFX_DEBUG_WIREFRAME //
+            bgfx::setDebug(BGFX_DEBUG_TEXT       //
+                           | BGFX_DEBUG_STATS    //
+                           | BGFX_DEBUG_PROFILER //
+                                                 //  | BGFX_DEBUG_WIREFRAME //
             );
             // bgfx::touch(v0);
-            
 
             list.init();
 

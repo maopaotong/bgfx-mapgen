@@ -120,6 +120,12 @@ namespace mg
             Entity::submit();
             counter++;
         }
+        void destroy() override{
+
+            Entity::destroy();
+            bgfx::destroy(texHandle);
+            bgfx::destroy(uHandle);
+        }
     };
 
 };
