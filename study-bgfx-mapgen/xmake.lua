@@ -70,14 +70,14 @@ rule("bgfx_shader")
     end)
 
 target("game")
+    set_languages("c++20")
     set_kind("binary")
+    add_packages("bgfx", "glfw", "bx","fmt")    
     add_files("src/*.cpp")    
     add_files("fog-util/src/*.cpp")
     add_files("shaders/**/s**.vert", {rule = "bgfx_shader"})
     add_files("shaders/**/s**.frag", {rule = "bgfx_shader"})
-    add_packages("bgfx", "glfw", "bx","fmt")    
     add_includedirs("include")
     add_includedirs("fog-util/include")    
-    set_languages("c++20")
     
     
