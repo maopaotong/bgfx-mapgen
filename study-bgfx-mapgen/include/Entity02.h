@@ -91,6 +91,7 @@ namespace mg
             ibh = bgfx::createIndexBuffer(bgfx::makeRef(iData, sizeof(uint16_t) * iCount, [](void *mData, void *uData)
                                                         { delete[] static_cast<uint16_t *>(mData); }));
             bx::mtxScale(mtx1, 1.0f, 1.0f, 10.0f); //
+            bx::mtxRotateX(mtx2, 3.14f/4 );
 
             uHandle = bgfx::createUniform("s_colorMap", bgfx::UniformType::Sampler);
             texHandle = ColorMap::createTexture();
@@ -98,8 +99,7 @@ namespace mg
         }
         void submit() override
         {
-            //bx::mtxRotateXY(mtx2, counter * 0.01f, counter * 0.01f);
-            bx::mtxIdentity(mtx2);
+            //bx::mtxIdentity(mtx2);
             //bx::mtxRotateXY(mtx2, 0 * 0.01f, 0 * 0.01f);
             bx::mtxMul(mtx3, mtx2, mtx1);
             bgfx::setTransform(mtx3);

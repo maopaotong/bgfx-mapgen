@@ -33,6 +33,8 @@ namespace mg
 {
     using AllRenderables = RenderableTuple<Entity02>;
     using AllViews = ViewTuple<View0, View1>;
+    //using AllViews = ViewTuple<View0>;
+
     struct Example
     {
 
